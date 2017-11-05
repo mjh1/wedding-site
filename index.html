@@ -322,7 +322,83 @@
 				</div>
 			</div>
 		</div>
-		<!-- fh5co-blog-section -->
+
+		<div id="fh5co-contact" class="animate-box">
+			<div class="container">
+				<form id="rsvp-form">
+					<div class="row">
+						<div class="col-md-6">
+							<h3 class="section-title">RSVP</h3>
+							<p>Please send the following form once per person you want to RSVP for.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<input id="rsvp-name" type="text" class="form-control" placeholder="Name"/>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group">
+										<textarea name="" class="form-control" id="rsvp-message" cols="30" rows="5" placeholder="Message"></textarea>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<p>Attending?</p>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<input id="rsvp-attending" type="radio" class="form-control" name="rsvp-attending" value="yes"/><span>yes</span>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<input id="rsvp-attending" type="radio" class="form-control" name="rsvp-attending" value="no"/><span>no</span>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group">
+										<input type="submit" value="Send" class="btn btn-primary">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+var URL = 'https://kqj7ssz8mj.execute-api.eu-west-1.amazonaws.com/live/rsvp'
+
+$('#rsvp-form').submit(function (event) {
+  event.preventDefault()
+
+  var data = {
+    name: $('#rsvp-name').val(),
+		attending: $('input[name=rsvp-attending]:checked', '#rsvp-form').val(),
+    message: $('#rsvp-message').val()
+  }
+
+  $.ajax({
+    type: 'POST',
+    url: URL,
+    dataType: 'json',
+    contentType: 'application/json',
+    data: JSON.stringify(data),
+    success: function () {
+      // clear form and show a success message
+    },
+    error: function () {
+      // show an error message
+    }
+  })
+})
+</script>
+
 		<footer>
 			<div id="footer">
 				<div class="container">
