@@ -48,6 +48,16 @@
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
 
+<script>
+
+function navClick(link) {
+	if ( $('body').hasClass('fh5co-offcanvas') ) {
+		$('body').removeClass('fh5co-offcanvas');
+	}
+	window.location = link
+	return false;
+}
+</script>
 	</head>
 	<body>
 		<div id="fh5co-wrapper">
@@ -65,15 +75,15 @@
 									<a href="index.html">Home</a>
 								</li-->
 								<li>
-									<a href="#photos-title" class="fh5co-sub-ddown">Photos</a>
+									<a href="#" onclick="return navClick('#photos-title')" class="fh5co-sub-ddown">Photos</a>
 								</li>
 								<li>
-									<a href="#venue-title" class="fh5co-sub-ddown">Venue</a>
+									<a href="#" onclick="return navClick('#venue-title')" class="fh5co-sub-ddown">Venue</a>
 								</li>
-								<li><a href="#timings-title">Timings</a></li>
-								<li><a href="#accommodation-title">Accommodation</a></li>
-								<li><a href="">RSVP</a></li>
-								<li><a href="#giftlist-title">Gift list</a></li>
+								<li><a href="#" onclick="return navClick('#timings-title')">Timings</a></li>
+								<li><a href="#" onclick="return navClick('#accommodation-title')">Accommodation</a></li>
+								<li><a href="#" onclick="return navClick('#rsvp-title')">RSVP</a></li>
+								<li><a href="#" onclick="return navClick('#giftlist-title')">Gift list</a></li>
 								<li><a href="">FAQ</a></li>
 							</ul>
 						</nav>
@@ -325,11 +335,18 @@
 
 		<div id="fh5co-contact" class="animate-box">
 			<div class="container">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 text-center heading-section animate-box">
+						<h3 id="rsvp-title">RSVP</h3>
+					</div>
+				</div>
+			</div>
+			<div class="container">
 				<form id="rsvp-form">
 					<div class="row">
 						<div class="col-md-6">
-							<h3 class="section-title">RSVP</h3>
-							<p>Please send the following form once per person you want to RSVP for.</p>
+							<!--h3 class="section-title">RSVP</h3-->
+							<p>Please send the following info once per person you want to RSVP for.</p>
 						</div>
 						<div class="col-md-6">
 							<div class="row">
@@ -360,7 +377,7 @@
 								</div>
 								<div class="col-md-12">
 									<div class="form-group">
-										<input type="submit" value="Send" class="btn btn-primary">
+										<input id="rsvp-submit" type="submit" value="Send" class="btn btn-primary">
 									</div>
 								</div>
 							</div>
@@ -383,6 +400,7 @@ $('#rsvp-form').submit(function (event) {
     message: $('#rsvp-message').val()
   }
 
+$('#rsvp-submit').val('Sending..');
   $.ajax({
     type: 'POST',
     url: URL,
@@ -390,10 +408,14 @@ $('#rsvp-form').submit(function (event) {
     contentType: 'application/json',
     data: JSON.stringify(data),
     success: function () {
-      // clear form and show a success message
+			$('#rsvp-submit').val('Sent');
+			setTimeout(function(){
+				$('#rsvp-submit').val('Send');
+			}, 5000);
     },
     error: function () {
-      // show an error message
+			$('#rsvp-submit').val('Send');
+      alert('Error sending RSVP');
     }
   })
 })
