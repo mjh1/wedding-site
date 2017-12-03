@@ -82,7 +82,7 @@ function navClick(link) {
 								</li>
 								<li><a href="#" onclick="return navClick('#timings')">Timings</a></li>
 								<li><a href="#" onclick="return navClick('#accommodation')">Accommodation</a></li>
-                                <!--li><a href="#" onclick="return navClick('#rsvp')">RSVP</a></li-->
+                                <li><a href="#" onclick="return navClick('#rsvp')">RSVP</a></li>
 								<li><a href="#" onclick="return navClick('#giftlist')">Gift list</a></li>
 								<li><a href="#" onclick="return navClick('#faq')">FAQ</a></li>
 							</ul>
@@ -314,8 +314,8 @@ function navClick(link) {
 				<div class="row">
 					<div class="col-md-8 col-md-offset-2 text-center heading-section animate-box">
 						<h3 id="giftlist">Gift List</h3>
-						<p>We are not expecting gifts, as your presence at our wedding is all we really want! However, if you would like to give us something, we have set up a <a href="https://www.johnlewisgiftlist.com/giftint/JSPs/GiftList/BuyGifts/GuestFindAList.jsp" target="_blank">John Lewis gift list</a> (725295). Because of item availability we were told to leave it blank until 8 weeks before the wedding, gift vouchers should still be available though.</p>
-						<p>Alternatively you can make a contribution to our honeymoon</p>
+						<p>We are not expecting gifts, as your presence at our wedding is all we really want! However, if you would like to give us something, we have set up a <a href="https://www.johnlewisgiftlist.com/giftint/JSPs/GiftList/BuyGifts/GuestFindAList.jsp" target="_blank">John Lewis gift list</a> (725295). Apparently the list won't be live until 6 weeks before the wedding (24th Feb), because of item availability.</p>
+						<p>Alternatively you can make a contribution to our honeymoon.</p>
 						<!--p></p-->
 					</div>
 				</div>
@@ -327,26 +327,40 @@ function navClick(link) {
 				<div class="row">
 					<div class="col-md-8 col-md-offset-2 text-center heading-section animate-box">
 						<h3 id="rsvp">RSVP</h3>
+						<p>Please send the form below to RSVP, you can use one line per name if responding for multiple people.</p>
 					</div>
 				</div>
 			</div>
 			<div class="container">
 				<form id="rsvp-form">
 					<div class="row">
-						<div class="col-md-6">
-							<!--h3 class="section-title">RSVP</h3-->
-							<p>Please send the following info once per person you want to RSVP for.</p>
+						<div class="col-md-3">
 						</div>
 						<div class="col-md-6">
 							<div class="row">
 								<div class="col-md-12">
 									<div class="form-group">
-										<input id="rsvp-name" type="text" class="form-control" placeholder="Name"/>
+										<textarea name="" class="form-control" id="rsvp-name" cols="30" rows="2" placeholder="Name(s)"></textarea>
 									</div>
 								</div>
 								<div class="col-md-12">
 									<div class="form-group">
-										<textarea name="" class="form-control" id="rsvp-message" cols="30" rows="5" placeholder="Message"></textarea>
+										<input id="rsvp-children" type="text" class="form-control" placeholder="Number of children"/>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group">
+										<textarea name="" class="form-control" id="rsvp-diet" cols="30" rows="2" placeholder="Dietary requirements"></textarea>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group">
+										<textarea name="" class="form-control" id="rsvp-songs" cols="30" rows="2" placeholder="Any song requests"></textarea>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group">
+										<textarea name="" class="form-control" id="rsvp-message" cols="30" rows="2" placeholder="Message"></textarea>
 									</div>
 								</div>
 								<div class="col-md-4">
@@ -370,6 +384,8 @@ function navClick(link) {
 									</div>
 								</div>
 							</div>
+						</div>
+						<div class="col-md-3">
 						</div>
 					</div>
 				</form>
@@ -395,8 +411,16 @@ var URL = 'https://kqj7ssz8mj.execute-api.eu-west-1.amazonaws.com/live/rsvp'
 $('#rsvp-form').submit(function (event) {
   event.preventDefault()
 
+if ($('#rsvp-name').val().trim() === '') {
+	alert('Please fill in at least one name.');
+} else if (typeof ($('input[name=rsvp-attending]:checked', '#rsvp-form').val()) === 'undefined') {
+	alert('Please select \'yes\' or \'no\' for attending.');
+} else {
   var data = {
     name: $('#rsvp-name').val(),
+	  diet: $('#rsvp-diet').val(),
+		songs: $('#rsvp-songs').val(),
+		children: $('#rsvp-children').val(),
 		attending: $('input[name=rsvp-attending]:checked', '#rsvp-form').val(),
     message: $('#rsvp-message').val()
   }
@@ -408,17 +432,23 @@ $('#rsvp-submit').val('Sending..');
     dataType: 'json',
     contentType: 'application/json',
     data: JSON.stringify(data),
-    success: function () {
-			$('#rsvp-submit').val('Sent');
-			setTimeout(function(){
+    success: function (resp) {
+			if (JSON.stringify(resp).indexOf('error') > 0) {
 				$('#rsvp-submit').val('Send');
-			}, 5000);
+      	alert('Error sending RSVP');
+			} else {
+				$('#rsvp-submit').val('Sent');
+				setTimeout(function(){
+					$('#rsvp-submit').val('Send');
+				}, 5000);
+			}
     },
     error: function () {
 			$('#rsvp-submit').val('Send');
       alert('Error sending RSVP');
     }
   })
+}
 })
 </script>
 
