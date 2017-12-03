@@ -505,7 +505,7 @@ figure {
 .fh5co-grid {
   height: 302px;
   background-size: cover;
-  background-position: center center;
+  background-position: center top;
   margin-bottom: 30px;
   position: relative;
   -webkit-border-radius: 7px;
