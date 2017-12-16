@@ -380,6 +380,17 @@ function navClick(link) {
 								</div>
 								<div class="col-md-12">
 									<div class="form-group">
+										<div id="alert_placeholder"></div>
+										<!--div class="alert alert-warning" role="alert">
+										  This is a warning alert—check it out!
+										  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+										    <span aria-hidden="true">&times;</span>
+										  </button>
+										</div-->
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group">
 										<input id="rsvp-submit" type="submit" value="Send" class="btn btn-primary">
 									</div>
 								</div>
@@ -413,6 +424,11 @@ function navClick(link) {
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
+
+alert_warning = function(message) {
+    $('#alert_placeholder').html('<div class="alert alert-warning" role="alert">' + message + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>')
+}
+
 var URL = 'https://kqj7ssz8mj.execute-api.eu-west-1.amazonaws.com/live/rsvp'
 
 $('#rsvp-form').submit(function (event) {
@@ -449,6 +465,7 @@ $('#rsvp-submit').val('Sending..');
       	alert('Error sending RSVP');
 			} else {
 				$('#rsvp-submit').val('Sent');
+				alert_warning('RSVP sent, thanks!')
 				setTimeout(function(){
 					$('#rsvp-submit').val('Send');
 				}, 5000);
