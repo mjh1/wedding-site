@@ -418,10 +418,14 @@ var URL = 'https://kqj7ssz8mj.execute-api.eu-west-1.amazonaws.com/live/rsvp'
 $('#rsvp-form').submit(function (event) {
   event.preventDefault()
 
+$('#rsvp-submit').prop('disabled', true);
+
 if ($('#rsvp-name').val().trim() === '') {
 	alert('Please fill in at least one name.');
+	$('#rsvp-submit').prop('disabled', false);
 } else if (typeof ($('input[name=rsvp-attending]:checked', '#rsvp-form').val()) === 'undefined') {
 	alert('Please select \'yes\' or \'no\' for attending.');
+	$('#rsvp-submit').prop('disabled', false);
 } else {
   var data = {
     name: $('#rsvp-name').val(),
@@ -454,7 +458,9 @@ $('#rsvp-submit').val('Sending..');
 			$('#rsvp-submit').val('Send');
       alert('Error sending RSVP');
     }
-  })
+  }).always(function () {
+		$('#rsvp-submit').prop('disabled', false);
+	})
 }
 })
 </script>
